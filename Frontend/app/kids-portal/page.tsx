@@ -13,11 +13,13 @@ import {
 
 import toast from 'react-hot-toast'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import NaughtyNiceScanner from '../../components/NaughtyNiceScanner'
 import ElfNameGenerator from '../../components/ElfNameGenerator'
 import LetterToSanta from '../../components/LetterToSanta'
 
 export default function KidsPortal() {
+  const router = useRouter()
   const [activeTab, setActiveTab] = useState<'messages' | 'wishlist' | 'gifts' | 'funzone'>('funzone')
   const [messages, setMessages] = useState<any[]>([])
   const [newMessage, setNewMessage] = useState('')
@@ -25,14 +27,35 @@ export default function KidsPortal() {
 
   const [gifts, setGifts] = useState<any[]>([])
   const [childData, setChildData] = useState<any | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
 
   // Mock child data
   const fallbackChild = {
     name: 'Emma Johnson',
     age: 7,
     behaviorScore: 95,
-    avatar: '\ud83d\udc67'
+    avatar: '👧'
   }
+
+  // Check authentication on mount
+  useEffect(() => {
+    const checkAuth = () => {
+      try {
+        const stored = typeof window !== 'undefined' ? localStorage.getItem('child') : null
+        if (!stored) {
+          // No child data found, redirect to registration
+          toast.error('Please register or login first!')
+          router.push('/child-register')
+          return
+        }
+        setIsLoading(false)
+      } catch (e) {
+        toast.error('Please register or login first!')
+        router.push('/child-register')
+      }
+    }
+    checkAuth()
+  }, [router])
 
   // No default mock messages: chat starts empty unless real messages are loaded or sent
 
@@ -238,6 +261,18 @@ export default function KidsPortal() {
   }
 
   const behavior = getBehaviorBadge((childData || fallbackChild).behaviorScore)
+
+  // Show loading while checking auth
+  if (isLoading) {
+    return (
+      <div className="min-h-screen christmas-bg flex items-center justify-center">
+        <div className="text-center">
+          <div className="text-6xl mb-4 animate-bounce">🎅</div>
+          <p className="text-xl text-gray-700 font-bold">Checking your Nice List status...</p>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen christmas-bg overflow-y-auto">

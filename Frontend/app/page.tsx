@@ -70,15 +70,15 @@ export default function Home() {
   return (
     <div className="min-h-screen christmas-bg">
       {/* Header */}
-      <header className="relative z-10 p-6">
-        <nav className="max-w-7xl mx-auto flex justify-between items-center">
+      <header className="relative z-10 p-4 md:p-6">
+        <nav className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
-            className="flex items-center space-x-3"
+            className="flex items-center space-x-2 md:space-x-3"
           >
-            <SparklesIcon className="h-10 w-10 text-christmas-gold" />
-            <h1 className="text-3xl font-bold text-christmas-red text-christmas">
+            <SparklesIcon className="h-8 w-8 md:h-10 md:w-10 text-christmas-gold" />
+            <h1 className="text-2xl md:text-3xl font-bold text-christmas-red text-christmas">
               Santa's Workshop
             </h1>
           </motion.div>
@@ -86,23 +86,23 @@ export default function Home() {
           <motion.div
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
-            className="flex space-x-3"
+            className="flex flex-wrap justify-center gap-2 md:gap-3"
           >
             <Link
               href="/kids-portal"
-              className="btn-christmas-gold text-sm py-2 px-4"
+              className="btn-christmas-gold text-xs md:text-sm py-2 px-3 md:px-4 whitespace-nowrap"
             >
               🧒 Kids Portal
             </Link>
             <Link
               href="/child-register"
-              className="btn-christmas-green text-sm py-2 px-4"
+              className="btn-christmas-green text-xs md:text-sm py-2 px-3 md:px-4 whitespace-nowrap"
             >
               📝 Register
             </Link>
             <Link
               href="/login"
-              className="btn-christmas text-sm py-2 px-4"
+              className="btn-christmas text-xs md:text-sm py-2 px-3 md:px-4 whitespace-nowrap"
             >
               🎅 Santa Login
             </Link>
@@ -111,17 +111,17 @@ export default function Home() {
       </header>
 
       {/* Hero Section */}
-      <main className="relative z-10 max-w-7xl mx-auto px-6 py-12">
+      <main className="relative z-10 max-w-7xl mx-auto px-4 md:px-6 py-8 md:py-12">
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="text-center mb-16"
+          className="text-center mb-12 md:mb-16"
         >
-          <h2 className="text-6xl font-bold text-gray-900 mb-6 text-christmas drop-shadow-sm">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-4 md:mb-6 text-christmas drop-shadow-sm px-2">
             🎄 Welcome to the North Pole! 🎄
           </h2>
-          <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto font-medium">
+          <p className="text-base sm:text-lg md:text-xl text-gray-600 mb-6 md:mb-8 max-w-3xl mx-auto font-medium px-4">
             The most magical workshop management system in the world!
             Help Santa manage children, gifts, elves, and spread Christmas joy globally.
           </p>
@@ -130,10 +130,10 @@ export default function Home() {
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="mb-8 px-8 py-4 bg-gradient-to-r from-red-600 to-christmas-red rounded-full text-xl font-bold text-white shadow-lg border-2 border-white/20 flex items-center mx-auto space-x-2 hover:shadow-2xl transition-all"
+              className="mb-6 md:mb-8 px-6 md:px-8 py-3 md:py-4 bg-gradient-to-r from-red-600 to-christmas-red rounded-full text-base md:text-xl font-bold text-white shadow-lg border-2 border-white/20 flex items-center mx-auto space-x-2 hover:shadow-2xl transition-all"
               style={{ textShadow: '0 2px 4px rgba(0,0,0,0.2)' }}
             >
-              <span className="text-2xl">🌍</span>
+              <span className="text-xl md:text-2xl">🌍</span>
               <span>Track Santa Live</span>
               <span className="animate-pulse">🔴</span>
             </motion.button>
@@ -144,28 +144,28 @@ export default function Home() {
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ delay: 0.5, type: "spring" }}
-            className="christmas-card max-w-2xl mx-auto mb-12 border-2 border-white/50"
+            className="christmas-card max-w-2xl mx-auto mb-8 md:mb-12 border-2 border-white/50 mx-4"
           >
-            <h3 className="text-2xl font-bold text-christmas-red mb-4 flex items-center justify-center">
-              <HeartIcon className="h-8 w-8 mr-2" />
+            <h3 className="text-xl md:text-2xl font-bold text-christmas-red mb-4 flex items-center justify-center">
+              <HeartIcon className="h-6 w-6 md:h-8 md:w-8 mr-2" />
               Christmas Countdown
             </h3>
-            <div className="grid grid-cols-4 gap-4 text-center">
-              <div className="bg-christmas-red text-white p-4 rounded-lg shadow-lg">
-                <div className="text-3xl font-bold">{countdown.days}</div>
-                <div className="text-sm font-semibold">Days</div>
+            <div className="grid grid-cols-4 gap-2 md:gap-4 text-center">
+              <div className="bg-christmas-red text-white p-2 md:p-4 rounded-lg shadow-lg">
+                <div className="text-2xl md:text-3xl font-bold">{countdown.days}</div>
+                <div className="text-xs md:text-sm font-semibold">Days</div>
               </div>
-              <div className="bg-christmas-green text-white p-4 rounded-lg shadow-lg">
-                <div className="text-3xl font-bold">{countdown.hours}</div>
-                <div className="text-sm font-semibold">Hours</div>
+              <div className="bg-christmas-green text-white p-2 md:p-4 rounded-lg shadow-lg">
+                <div className="text-2xl md:text-3xl font-bold">{countdown.hours}</div>
+                <div className="text-xs md:text-sm font-semibold">Hours</div>
               </div>
-              <div className="bg-christmas-gold text-white p-4 rounded-lg shadow-lg">
-                <div className="text-3xl font-bold">{countdown.minutes}</div>
-                <div className="text-sm font-semibold">Minutes</div>
+              <div className="bg-christmas-gold text-white p-2 md:p-4 rounded-lg shadow-lg">
+                <div className="text-2xl md:text-3xl font-bold">{countdown.minutes}</div>
+                <div className="text-xs md:text-sm font-semibold">Minutes</div>
               </div>
-              <div className="bg-purple-600 text-white p-4 rounded-lg shadow-lg">
-                <div className="text-3xl font-bold">{countdown.seconds}</div>
-                <div className="text-sm font-semibold">Seconds</div>
+              <div className="bg-purple-600 text-white p-2 md:p-4 rounded-lg shadow-lg">
+                <div className="text-2xl md:text-3xl font-bold">{countdown.seconds}</div>
+                <div className="text-xs md:text-sm font-semibold">Seconds</div>
               </div>
             </div>
           </motion.div>
@@ -176,7 +176,7 @@ export default function Home() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.8 }}
-          className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8 mb-12 md:mb-16 px-4"
         >
           {features.map((feature, index) => (
             <motion.div
@@ -188,13 +188,13 @@ export default function Home() {
               className="christmas-card group cursor-pointer bg-white/80"
             >
               <Link href={feature.href}>
-                <div className={`w-16 h-16 bg-gradient-to-r ${feature.color} rounded-full flex items-center justify-center mb-4 mx-auto group-hover:scale-110 transition-transform shadow-md`}>
-                  <feature.icon className="h-8 w-8 text-white" />
+                <div className={`w-12 h-12 md:w-16 md:h-16 bg-gradient-to-r ${feature.color} rounded-full flex items-center justify-center mb-3 md:mb-4 mx-auto group-hover:scale-110 transition-transform shadow-md`}>
+                  <feature.icon className="h-6 w-6 md:h-8 md:w-8 text-white" />
                 </div>
-                <h3 className="text-xl font-bold text-gray-800 mb-2 text-center">
+                <h3 className="text-lg md:text-xl font-bold text-gray-800 mb-2 text-center">
                   {feature.title}
                 </h3>
-                <p className="text-gray-600 text-center text-sm">
+                <p className="text-gray-600 text-center text-xs md:text-sm">
                   {feature.description}
                 </p>
               </Link>
@@ -207,12 +207,12 @@ export default function Home() {
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.0 }}
-          className="christmas-card text-center mb-16 bg-gradient-to-r from-green-50 to-red-50 border-2 border-white/60"
+          className="christmas-card text-center mb-12 md:mb-16 bg-gradient-to-r from-green-50 to-red-50 border-2 border-white/60 mx-4"
         >
-          <h3 className="text-3xl font-bold text-christmas-red mb-4 text-christmas">
+          <h3 className="text-2xl md:text-3xl font-bold text-christmas-red mb-3 md:mb-4 text-christmas px-2">
             🧒 Kids Corner - Join Santa's Magic! 🎄
           </h3>
-          <p className="text-lg text-gray-700 mb-6 max-w-2xl mx-auto">
+          <p className="text-base md:text-lg text-gray-700 mb-4 md:mb-6 max-w-2xl mx-auto px-4">
             Register to join Santa's Nice List or access your personal Christmas portal!
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">

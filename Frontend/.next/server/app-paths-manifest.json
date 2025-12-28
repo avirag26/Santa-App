@@ -1,11 +1,7 @@
 {
-  "/kids-portal/page": "app/kids-portal/page.js",
   "/page": "app/page.js",
-  "/santa-tracker/page": "app/santa-tracker/page.js",
-  "/child-register/page": "app/child-register/page.js",
-  "/login/page": "app/login/page.js",
+  "/kids-portal/page": "app/kids-portal/page.js",
   "/dashboard/page": "app/dashboard/page.js",
-  "/children/page": "app/children/page.js",
-  "/gifts/page": "app/gifts/page.js",
-  "/messages/page": "app/messages/page.js"
+  "/santa-tracker/page": "app/santa-tracker/page.js",
+  "/children/page": "app/children/page.js"
 }
