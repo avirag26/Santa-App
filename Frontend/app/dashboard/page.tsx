@@ -13,6 +13,8 @@ import {
 } from '@heroicons/react/24/outline'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts'
 import WorkshopPulse from '../../components/WorkshopPulse'
+import WorkshopCCTV from '../../components/WorkshopCCTV'
+import SleighControl from '../../components/SleighControl'
 
 export default function Dashboard() {
   const [stats, setStats] = useState<any>(null)
@@ -142,8 +144,11 @@ export default function Dashboard() {
           </div>
         </motion.div>
 
-        {/* Live Workshop Magic Pulse */}
-        <WorkshopPulse />
+        {/* Live Workshop Magic Pulse & CCTV */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+          <WorkshopPulse />
+          <WorkshopCCTV />
+        </div>
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -228,6 +233,9 @@ export default function Dashboard() {
           </motion.div>
         </div>
 
+        {/* Sleigh Pre-flight HUD */}
+        <SleighControl />
+
         {/* Quick Actions */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -269,8 +277,8 @@ export default function Dashboard() {
             ].map((activity, index) => (
               <div key={index} className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
                 <div className={`w-2 h-2 rounded-full ${activity.type === 'message' ? 'bg-blue-500' :
-                    activity.type === 'gift' ? 'bg-green-500' :
-                      activity.type === 'behavior' ? 'bg-yellow-500' : 'bg-purple-500'
+                  activity.type === 'gift' ? 'bg-green-500' :
+                    activity.type === 'behavior' ? 'bg-yellow-500' : 'bg-purple-500'
                   }`} />
                 <div className="flex-1">
                   <p className="text-sm font-medium text-gray-900">{activity.action}</p>

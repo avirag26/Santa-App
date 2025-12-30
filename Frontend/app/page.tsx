@@ -101,6 +101,12 @@ export default function Home() {
               📝 Register
             </Link>
             <Link
+              href="/kids-login"
+              className="btn-christmas text-xs md:text-sm py-2 px-3 md:px-4 whitespace-nowrap bg-green-600 hover:bg-green-700"
+            >
+              🧒 Kids Login
+            </Link>
+            <Link
               href="/login"
               className="btn-christmas text-xs md:text-sm py-2 px-3 md:px-4 whitespace-nowrap"
             >
@@ -225,11 +231,11 @@ export default function Home() {
               <span>✨</span>
             </Link>
             <Link
-              href="/kids-portal"
+              href="/kids-login"
               className="btn-christmas text-xl py-4 px-8 flex items-center space-x-3 shadow-red-200"
             >
               <span>🎅</span>
-              <span>Kids Portal</span>
+              <span>Kids Login Portal</span>
               <span>📬</span>
             </Link>
           </div>

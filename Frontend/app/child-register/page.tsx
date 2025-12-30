@@ -36,7 +36,7 @@ export default function ChildRegister() {
         behaviorScore: 75, // Default good behavior score
       }
 
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/children`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/child-auth/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -54,10 +54,25 @@ export default function ChildRegister() {
             // Ignore storage errors
           }
         }
-        toast.success('\ud83c\udf84 Welcome to Santa\'s Nice List! Your registration is complete!')
+
+        const loginInfo = data.loginInfo || {};
+        toast.success(
+          (t) => (
+            <div className="text-center">
+              <p className="font-bold mb-2">🎉 Welcome to the Nice List!</p>
+              <p className="text-xs mb-2">Your magical password is:</p>
+              <p className="bg-white text-christmas-red font-black px-3 py-1 rounded-md text-lg mb-2 select-all">
+                {loginInfo.password || 'check your email'}
+              </p>
+              <p className="text-[10px] opacity-70">Write it down to login later!</p>
+            </div>
+          ),
+          { duration: 6000 }
+        )
+
         setTimeout(() => {
           router.push('/kids-portal')
-        }, 2000)
+        }, 3000)
       } else {
         toast.error(data.message || 'Registration failed')
       }
@@ -79,8 +94,8 @@ export default function ChildRegister() {
               Santa's Workshop
             </h1>
           </Link>
-          <Link 
-            href="/login" 
+          <Link
+            href="/login"
             className="text-white hover:text-yellow-300 font-medium text-sm"
           >
             Santa Login →
@@ -120,7 +135,7 @@ export default function ChildRegister() {
                 <span className="text-xl mr-2">👤</span>
                 About You
               </h3>
-              
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 <div>
                   <label className="block text-xs font-medium text-gray-700 mb-1">
@@ -188,7 +203,7 @@ export default function ChildRegister() {
                 <span className="text-xl mr-2">🗺️</span>
                 Where You Live
               </h3>
-              
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 <div>
                   <label className="block text-xs font-medium text-gray-700 mb-1">
@@ -269,7 +284,7 @@ export default function ChildRegister() {
           {/* Compact Footer */}
           <div className="mt-4 text-center">
             <p className="text-xs text-gray-600 mb-2">
-              Already registered? 
+              Already registered?
               <Link href="/" className="text-christmas-red hover:text-red-700 font-medium ml-1">
                 Go back to homepage
               </Link>

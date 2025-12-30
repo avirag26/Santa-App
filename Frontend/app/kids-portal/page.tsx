@@ -19,6 +19,7 @@ import ElfNameGenerator from '../../components/ElfNameGenerator'
 import LetterToSanta from '../../components/LetterToSanta'
 import GiftFindingGame from '../../components/GiftFindingGame'
 import ReindeerStable from '../../components/ReindeerStable'
+import AdventCalendar from '../../components/AdventCalendar'
 
 export default function KidsPortal() {
   const router = useRouter()
@@ -45,19 +46,25 @@ export default function KidsPortal() {
       try {
         const stored = typeof window !== 'undefined' ? localStorage.getItem('child') : null
         if (!stored) {
-          // No child data found, redirect to registration
-          toast.error('Please register or login first!')
-          router.push('/child-register')
+          // No child data found, redirect to login
+          toast.error('Please login to see your magic status!')
+          router.push('/kids-login')
           return
         }
         setIsLoading(false)
       } catch (e) {
-        toast.error('Please register or login first!')
-        router.push('/child-register')
+        toast.error('Please login to see your magic status!')
+        router.push('/kids-login')
       }
     }
     checkAuth()
   }, [router])
+
+  const handleLogout = () => {
+    localStorage.removeItem('child')
+    toast.success('Logged out successfully! See you soon! 👋')
+    router.push('/')
+  }
 
   // No default mock messages: chat starts empty unless real messages are loaded or sent
 
@@ -284,9 +291,15 @@ export default function KidsPortal() {
           <Link href="/" className="text-slate-700 hover:text-christmas-red font-bold text-sm transition-colors">
             ← Back to Home
           </Link>
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-4">
             <span className="text-slate-700 font-bold text-sm">{(childData || fallbackChild).name}</span>
             <span className="text-lg">{(childData || fallbackChild).avatar}</span>
+            <button
+              onClick={handleLogout}
+              className="bg-red-100 hover:bg-red-200 text-red-600 px-3 py-1 rounded-full text-xs font-bold transition-colors border border-red-200"
+            >
+              Logout 👋
+            </button>
           </div>
         </div>
       </div>
@@ -530,6 +543,7 @@ export default function KidsPortal() {
             </div>
 
             <GiftFindingGame />
+            <AdventCalendar />
             <ReindeerStable />
           </div>
         )}
