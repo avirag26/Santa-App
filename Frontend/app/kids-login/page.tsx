@@ -34,7 +34,7 @@ export default function KidsLogin() {
             if (response.ok) {
                 localStorage.setItem('childToken', data.token)
                 localStorage.setItem('child', JSON.stringify(data.child))
-                toast.success(`Welcome back, ${data.child.name}! \ud83c\udf84`)
+                toast.success(`Welcome back, ${data.child.name}! 🎄`)
                 router.push('/kids-portal')
             } else {
                 toast.error(data.message || 'Login failed. Check your email and password!')
@@ -61,7 +61,7 @@ export default function KidsLogin() {
                         transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
                         className="text-6xl mb-4"
                     >
-                        \ud83e\udud2
+                        🧝
                     </motion.div>
                     <h1 className="text-3xl font-bold text-christmas-red text-christmas">
                         Kids Portal Login
@@ -143,7 +143,7 @@ export default function KidsLogin() {
                         href="/"
                         className="text-slate-500 hover:text-christmas-red font-medium text-sm transition-colors"
                     >
-                        \u2190 Back to Home
+                        ← Back to Home
                     </Link>
                 </div>
             </motion.div>
