@@ -17,6 +17,7 @@ import { useRouter } from 'next/navigation'
 import NaughtyNiceScanner from '../../components/NaughtyNiceScanner'
 import ElfNameGenerator from '../../components/ElfNameGenerator'
 import LetterToSanta from '../../components/LetterToSanta'
+import GiftFindingGame from '../../components/GiftFindingGame'
 
 export default function KidsPortal() {
   const router = useRouter()
@@ -521,11 +522,13 @@ export default function KidsPortal() {
               </p>
             </div>
 
-            <div className="grid md:grid-cols-3 gap-6">
+            <div className="grid md:grid-cols-3 gap-6 mb-6">
               <NaughtyNiceScanner />
               <ElfNameGenerator />
               <LetterToSanta />
             </div>
+
+            <GiftFindingGame />
           </div>
         )}
       </div>

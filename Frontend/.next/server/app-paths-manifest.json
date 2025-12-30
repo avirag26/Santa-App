@@ -1,8 +1,7 @@
 {
-  "/not-found": "app/not-found.js",
+  "/login/page": "app/login/page.js",
   "/page": "app/page.js",
   "/kids-portal/page": "app/kids-portal/page.js",
-  "/santa-tracker/page": "app/santa-tracker/page.js",
-  "/dashboard/page": "app/dashboard/page.js",
-  "/children/page": "app/children/page.js"
+  "/children/page": "app/children/page.js",
+  "/dashboard/page": "app/dashboard/page.js"
 }
