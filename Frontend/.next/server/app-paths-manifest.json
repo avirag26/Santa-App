@@ -1,10 +1,9 @@
 {
-  "/not-found": "app/not-found.js",
   "/page": "app/page.js",
-  "/dashboard/page": "app/dashboard/page.js",
-  "/children/page": "app/children/page.js",
-  "/child-register/page": "app/child-register/page.js",
   "/login/page": "app/login/page.js",
-  "/kids-login/page": "app/kids-login/page.js",
-  "/kids-portal/page": "app/kids-portal/page.js"
+  "/kids-portal/page": "app/kids-portal/page.js",
+  "/messages/page": "app/messages/page.js",
+  "/child-register/page": "app/child-register/page.js",
+  "/dashboard/page": "app/dashboard/page.js",
+  "/children/page": "app/children/page.js"
 }

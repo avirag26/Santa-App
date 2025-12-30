@@ -40,18 +40,77 @@ export default function KidsPortal() {
     avatar: '👧'
   }
 
-  // Check authentication on mount
+  const loadMessages = async (childId: string) => {
+    if (!childId || !process.env.NEXT_PUBLIC_API_URL) return
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/messages/conversation/child/${childId}/santa/507f1f77bcf86cd799439011`
+      )
+
+      if (response.ok) {
+        const data = await response.json()
+        setMessages(Array.isArray(data) ? data : [])
+      }
+    } catch (error) {
+      setMessages([])
+    }
+  }
+
+  const loadGifts = async (childId: string) => {
+    if (!childId || !process.env.NEXT_PUBLIC_API_URL) return
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/gifts?childId=${childId}`
+      )
+
+      if (response.ok) {
+        const data = await response.json()
+        setGifts(data.gifts || [])
+      }
+    } catch (error) {
+      setGifts([])
+    }
+  }
+
+  const loadWishlist = async (childId: string) => {
+    if (!childId || !process.env.NEXT_PUBLIC_API_URL) return
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/children/${childId}`
+      )
+
+      if (response.ok) {
+        const data = await response.json()
+        if (Array.isArray(data.wishlist)) {
+          const items = data.wishlist.map((w: any) => typeof w === 'string' ? w : w.item || '').slice(0, 10)
+          while (items.length < 3) items.push('')
+          setWishlist(items)
+        }
+      }
+    } catch (error) {
+      setWishlist(['', '', ''])
+    }
+  }
+
   useEffect(() => {
     const checkAuth = () => {
       try {
         const stored = typeof window !== 'undefined' ? localStorage.getItem('child') : null
         if (!stored) {
-          // No child data found, redirect to login
           toast.error('Please login to see your magic status!')
           router.push('/kids-login')
           return
         }
+        const parsed = JSON.parse(stored)
+        setChildData(parsed)
         setIsLoading(false)
+
+        const id = parsed.id || parsed._id
+        if (id) {
+          loadMessages(id)
+          loadGifts(id)
+          loadWishlist(id)
+        }
       } catch (e) {
         toast.error('Please login to see your magic status!')
         router.push('/kids-login')
@@ -62,100 +121,10 @@ export default function KidsPortal() {
 
   const handleLogout = () => {
     localStorage.removeItem('child')
+    localStorage.removeItem('childToken')
     toast.success('Logged out successfully! See you soon! 👋')
     router.push('/')
   }
-
-  // No default mock messages: chat starts empty unless real messages are loaded or sent
-
-  useEffect(() => {
-    let storedChild: any = null
-    try {
-      const stored = typeof window !== 'undefined' ? localStorage.getItem('child') : null
-      if (stored) {
-        storedChild = JSON.parse(stored)
-        setChildData(storedChild)
-      }
-    } catch (e) {
-      setChildData(null)
-    }
-
-    const loadMessages = async () => {
-      if (!storedChild || !process.env.NEXT_PUBLIC_API_URL) {
-        setMessages([])
-        return
-      }
-
-      try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/messages/conversation/child/${storedChild._id}/santa/507f1f77bcf86cd799439011`
-        )
-
-        if (response.ok) {
-          const data = await response.json()
-          setMessages(Array.isArray(data) ? data : [])
-        } else {
-          setMessages([])
-        }
-      } catch (error) {
-        setMessages([])
-      }
-    }
-
-    const loadGifts = async () => {
-      if (!storedChild || !process.env.NEXT_PUBLIC_API_URL) {
-        setGifts([])
-        return
-      }
-
-      try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/gifts?childId=${storedChild._id}`
-        )
-
-        if (response.ok) {
-          const data = await response.json()
-          setGifts(data.gifts || [])
-        } else {
-          setGifts([])
-        }
-      } catch (error) {
-        setGifts([])
-      }
-    }
-
-    const loadWishlist = async () => {
-      if (!storedChild || !process.env.NEXT_PUBLIC_API_URL) {
-        setWishlist(['', '', ''])
-        return
-      }
-
-      try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/children/${storedChild._id}`
-        )
-
-        if (response.ok) {
-          const data = await response.json()
-          if (Array.isArray(data.wishlist) && data.wishlist.length) {
-            const items = data.wishlist.map((w: any) => w.item || '').slice(0, 5)
-            while (items.length < 3) items.push('')
-            setWishlist(items)
-          } else {
-            setWishlist(['', '', ''])
-          }
-        } else {
-          setWishlist(['', '', ''])
-        }
-      } catch (error) {
-        setWishlist(['', '', ''])
-      }
-    }
-
-    loadMessages()
-    loadGifts()
-    loadWishlist()
-  }, [])
 
   const sendMessage = async () => {
     if (!newMessage.trim()) return
@@ -170,24 +139,28 @@ export default function KidsPortal() {
     if (!childData || !process.env.NEXT_PUBLIC_API_URL) {
       setMessages(prev => [...prev, baseMessage])
       setNewMessage('')
-      toast.success('Message sent to Santa! \ud83c\udf85')
+      toast.success('Message sent to Santa! 🎅')
       return
     }
 
+    const childId = childData.id || childData._id;
     const payload = {
       sender: 'child',
-      senderId: childData._id,
+      senderId: childId,
       recipient: 'santa',
       recipientId: '507f1f77bcf86cd799439011',
       content: newMessage,
       messageType: 'letter'
     }
 
+    const token = typeof window !== 'undefined' ? localStorage.getItem('childToken') : null
+
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/messages`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          ...(token && { 'Authorization': `Bearer ${token}` })
         },
         body: JSON.stringify(payload)
       })
@@ -204,17 +177,26 @@ export default function KidsPortal() {
             timestamp: saved.createdAt || baseMessage.timestamp
           }
         ])
-        toast.success('Message sent to Santa! \ud83c\udf85')
+        toast.success('Message sent to Santa! 🎅')
         setNewMessage('')
+
+        // Trigger auto-reply for demo
+        fetch(`${process.env.NEXT_PUBLIC_API_URL}/messages/santa-reply`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ childId: childId, originalMessageId: saved._id })
+        }).then(() => loadMessages(childId))
       } else {
+        const errorData = await response.json().catch(() => ({}))
+        console.error('Message failed:', errorData)
         setMessages(prev => [...prev, baseMessage])
         setNewMessage('')
-        toast.success('Message sent to Santa! \ud83c\udf85')
+        toast.success('Message sent locally! Santa will see it soon 🎅')
       }
     } catch (error) {
       setMessages(prev => [...prev, baseMessage])
       setNewMessage('')
-      toast.success('Message sent to Santa! \ud83c\udf85')
+      toast.success('Message sent to Santa! 🎅')
     }
   }
 
@@ -227,46 +209,48 @@ export default function KidsPortal() {
   const saveWishlist = async () => {
     const activeChild = childData
     if (!activeChild || !process.env.NEXT_PUBLIC_API_URL) {
-      toast.success('Wishlist saved locally! \ud83c\udf81')
+      toast.success('Wishlist saved locally! 🎁')
       return
     }
 
     const items = wishlist
       .map(item => item.trim())
       .filter(Boolean)
+      .map(item => ({ item, priority: 'medium', category: 'toys' }))
 
     if (!items.length) {
       toast.error('Add at least one wish before saving!')
       return
     }
 
-    try {
-      await Promise.all(
-        items.map(item =>
-          fetch(`${process.env.NEXT_PUBLIC_API_URL}/children/${activeChild._id}/wishlist`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              item,
-              priority: 'medium',
-              category: 'toys',
-            }),
-          })
-        )
-      )
+    const token = typeof window !== 'undefined' ? localStorage.getItem('childToken') : null
 
-      toast.success('Wishlist sent to Santa! \ud83c\udf81')
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/child-auth/wishlist`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token && { 'Authorization': `Bearer ${token}` })
+        },
+        body: JSON.stringify({ wishlist: items }),
+      })
+
+      if (response.ok) {
+        toast.success('Wishlist synced with Santa! 🎁')
+      } else {
+        const errorData = await response.json().catch(() => ({}))
+        console.error('Sync failed:', errorData)
+        toast.error(`Sync failed: ${errorData.message || 'Server error'}. Saved locally!`)
+      }
     } catch (error) {
-      toast.error('Could not save wishlist. Please try again.')
+      toast.error('Connection error. Saved locally!')
     }
   }
 
   const getBehaviorBadge = (score) => {
-    if (score >= 80) return { text: 'Very Nice', class: 'bg-green-100 text-green-800', icon: '\ud83c\udf81' }
-    if (score >= 60) return { text: 'Nice', class: 'bg-blue-100 text-blue-800', icon: '\ud83d\ude0a' }
-    return { text: 'Okay', class: 'bg-yellow-100 text-yellow-800', icon: '\ud83d\ude10' }
+    if (score >= 80) return { text: 'Very Nice', class: 'bg-green-100 text-green-800', icon: '🎁' }
+    if (score >= 60) return { text: 'Nice', class: 'bg-blue-100 text-blue-800', icon: '😊' }
+    return { text: 'Okay', class: 'bg-yellow-100 text-yellow-800', icon: '😐' }
   }
 
   const behavior = getBehaviorBadge((childData || fallbackChild).behaviorScore)

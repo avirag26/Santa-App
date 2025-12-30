@@ -50,8 +50,20 @@ exports.registerChild = async (req, res) => {
 
     await childAuth.save();
 
+    // Generate JWT token for immediate access
+    const token = jwt.sign(
+      {
+        id: child._id,
+        email: child.email,
+        type: 'child'
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: '7d' }
+    );
+
     res.status(201).json({
       message: 'Welcome to Santa\'s Nice List! 🎄',
+      token, // Include token in registration response
       child: {
         id: child._id,
         name: child.name,
@@ -96,12 +108,12 @@ exports.loginChild = async (req, res) => {
     if (!isMatch) {
       // Increment login attempts
       childAuth.loginAttempts += 1;
-      
+
       // Lock account after 5 failed attempts
       if (childAuth.loginAttempts >= 5) {
         childAuth.lockUntil = Date.now() + 30 * 60 * 1000; // 30 minutes
       }
-      
+
       await childAuth.save();
       return res.status(401).json({ message: 'Invalid credentials' });
     }
@@ -114,7 +126,7 @@ exports.loginChild = async (req, res) => {
 
     // Generate JWT token
     const token = jwt.sign(
-      { 
+      {
         id: childAuth.childId._id,
         email: childAuth.email,
         type: 'child'
@@ -172,7 +184,7 @@ exports.getChildProfile = async (req, res) => {
 exports.updateWishlist = async (req, res) => {
   try {
     const { wishlist } = req.body;
-    
+
     const child = await Child.findByIdAndUpdate(
       req.user.id,
       { wishlist },

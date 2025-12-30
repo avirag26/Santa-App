@@ -269,23 +269,31 @@ export default function Dashboard() {
         >
           <h3 className="text-xl font-bold text-gray-800 mb-4">Recent Activity</h3>
           <div className="space-y-4">
-            {[
-              { action: 'New letter from Emma (Age 7)', time: '2 minutes ago', type: 'message' },
-              { action: 'Gift "Teddy Bear" completed by Elf Jingle', time: '15 minutes ago', type: 'gift' },
-              { action: 'Behavior score updated for Tommy (+10 points)', time: '1 hour ago', type: 'behavior' },
-              { action: 'New child registered: Sofia from Spain', time: '2 hours ago', type: 'child' }
-            ].map((activity, index) => (
-              <div key={index} className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
-                <div className={`w-2 h-2 rounded-full ${activity.type === 'message' ? 'bg-blue-500' :
-                  activity.type === 'gift' ? 'bg-green-500' :
-                    activity.type === 'behavior' ? 'bg-yellow-500' : 'bg-purple-500'
-                  }`} />
+            {activities?.recentMessages?.map((msg: any, index: number) => (
+              <div key={`msg-${index}`} className="flex items-center space-x-3 p-3 bg-blue-50/50 rounded-lg border border-blue-100/50">
+                <div className="w-2 h-2 rounded-full bg-blue-500" />
                 <div className="flex-1">
-                  <p className="text-sm font-medium text-gray-900">{activity.action}</p>
-                  <p className="text-xs text-gray-500">{activity.time}</p>
+                  <p className="text-sm font-medium text-gray-900">
+                    Letter from {msg.senderId?.name || 'a child'}: "{msg.content.substring(0, 50)}{msg.content.length > 50 ? '...' : ''}"
+                  </p>
+                  <p className="text-xs text-gray-500">{new Date(msg.createdAt).toLocaleString()}</p>
                 </div>
               </div>
             ))}
+            {activities?.recentGifts?.map((gift: any, index: number) => (
+              <div key={`gift-${index}`} className="flex items-center space-x-3 p-3 bg-green-50/50 rounded-lg border border-green-100/50">
+                <div className="w-2 h-2 rounded-full bg-green-500" />
+                <div className="flex-1">
+                  <p className="text-sm font-medium text-gray-900">
+                    Gift for {gift.recipientChild?.name || 'Someone'}: {gift.status.replace('_', ' ')}
+                  </p>
+                  <p className="text-xs text-gray-500">{new Date(gift.createdAt).toLocaleString()}</p>
+                </div>
+              </div>
+            ))}
+            {(!activities?.recentMessages?.length && !activities?.recentGifts?.length) && (
+              <p className="text-center text-gray-500 py-4 italic">No recent magic activity recorded yet!</p>
+            )}
           </div>
         </motion.div>
       </div>

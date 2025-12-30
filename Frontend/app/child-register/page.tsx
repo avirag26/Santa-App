@@ -47,6 +47,9 @@ export default function ChildRegister() {
       const data = await response.json()
 
       if (response.ok) {
+        if (data.token) {
+          localStorage.setItem('childToken', data.token)
+        }
         if (data.child) {
           try {
             localStorage.setItem('child', JSON.stringify(data.child))
